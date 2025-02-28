@@ -44,6 +44,6 @@ var siriWave = new SiriWave({
     eel.playassistantsound()
     $("#Oval").attr("hidden", true);
     $("#SiriWave").attr("hidden", false);
-    eel.takecommand()()
+    eel.allcommands()()
 });
 });
