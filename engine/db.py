@@ -16,3 +16,15 @@ cursor = con.cursor()
 #query = "INSERT INTO web_command VALUES (null,'Canva', 'https://www.canva.com/')"
 #cursor.execute(query)
 #con.commit()
+
+cursor.execute("UPDATE web_command SET name = LOWER(name);")
+con.commit() 
+
+cursor.execute("UPDATE sys_command SET name = LOWER(name);")
+con.commit() 
+
+
+
+
+
+
