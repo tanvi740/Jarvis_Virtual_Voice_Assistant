@@ -17,11 +17,11 @@ cursor = con.cursor()
 #cursor.execute(query)
 #con.commit()
 
-cursor.execute("UPDATE web_command SET name = LOWER(name);")
-con.commit() 
+#cursor.execute("UPDATE web_command SET name = LOWER(name);")
+#con.commit() 
 
-cursor.execute("UPDATE sys_command SET name = LOWER(name);")
-con.commit() 
+#cursor.execute("UPDATE sys_command SET name = LOWER(name);")
+#con.commit() 
 
 
 
