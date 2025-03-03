@@ -1,7 +1,10 @@
-import time
 import pyttsx3
-import eel
 import speech_recognition as sr
+import eel
+import time
+
+
+
 
 def speak(text):
     
@@ -11,6 +14,7 @@ def speak(text):
     engine.setProperty('rate', 174)
     eel.DisplayMessage(text)
     engine.say(text)
+    eel.receiverText(text)
     engine.runAndWait()
 
 
@@ -43,21 +47,51 @@ def takecommand():
     
     return query.lower()
 
-@eel.expose
-def allcommands():
-    try:
-        query = takecommand()
-        print(query)
+SEND_MESSAGE = "send message"
+PHONE_CALL = "phone call"
+VIDEO_CALL="video call"
 
+@eel.expose
+def allcommands(message=1):
+
+    if message==1:
+        query=takecommand()
+        print(query)
+        eel.senderText(query)
+    else:
+        query=message    
+        eel.senderText(query)
+
+    try:
+        
         if "open" in query:
             from engine.features import opencommand
             opencommand(query)
         elif "on youtube" in query:
-          from engine.features import playyoutube
-          playyoutube(query)  
+            from engine.features import playyoutube
+            playyoutube(query)
+        
+        elif SEND_MESSAGE in query or PHONE_CALL in query or VIDEO_CALL in query:
+            from engine.features import findcontact, whatsapp
+            flag=""
+            contact_no, name = findcontact(query)
+            if(contact_no != 0):
+                
+                if "send message" in query:
+                    flag='message'
+                    speak("what message to send")
+                    query=takecommand() 
+
+                elif "phone call" in query:
+                   flag='call'
+                else:
+                    flag='video call'
+
+                whatsapp(contact_no,query,flag,name)
+
         else:
             print("not run")
-    
     except Exception as e:
-        print(f"An error:{str(e)}")
-    eel.ShowHood() 
+        print(f"Error:{str(e)}")                            
+    
+    eel.ShowHood()

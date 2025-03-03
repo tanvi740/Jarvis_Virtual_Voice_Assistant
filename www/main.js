@@ -58,4 +58,60 @@ function doc_keyUp(e) {
     }
 }
 document.addEventListener('keyup', doc_keyUp, false);
+
+ // to play assisatnt 
+ function playassistant(message) {
+
+    if (message != "") {
+
+        $("#Oval").attr("hidden", true);
+        $("#SiriWave").attr("hidden", false);
+        eel.allcommands(message);
+        $("#chatbox").val("")
+        $("#MicBtn").attr('hidden', false);
+        $("#SendBtn").attr('hidden', true);
+
+    }
+
+}
+
+
+// toogle fucntion to hide and display mic and send button 
+function showhidebutton(message) {
+    if (message.length == 0) {
+        $("#MicBtn").attr('hidden', false);
+        $("#SendBtn").attr('hidden', true);
+    }
+    else {
+        $("#MicBtn").attr('hidden', true);
+        $("#SendBtn").attr('hidden', false);
+    }
+}
+
+// key up event handler on text box
+$("#chatbox").keyup(function () {
+
+    let message = $("#chatbox").val();
+    showhidebutton(message)
+
+});
+
+ // send button event handler
+ $("#SendBtn").click(function () {
+    
+    let message = $("#chatbox").val()
+    playassistant(message)
+
+});
+
+ // enter press event handler on chat box
+ $("#chatbox").keypress(function (e) {
+    key = e.which;
+    if (key == 13) {
+        let message = $("#chatbox").val()
+        playassistant(message)
+    }
+});
+
+
 });

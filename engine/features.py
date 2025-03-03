@@ -1,7 +1,9 @@
 import os
 import re
+from shlex import quote
 import sqlite3
 import struct
+import subprocess
 import time
 import webbrowser
 import pyautogui as autogui
@@ -9,12 +11,11 @@ from playsound import playsound
 import eel
 import pvporcupine
 import pyaudio
-from engine.command import speak
-from engine.config import ASSISTANT_NAME
-#playing the assistant sound function
 import pywhatkit as kit
 
-from engine.helper import extract_yt_term
+from engine.command import speak
+from engine.config import ASSISTANT_NAME
+from engine.helper import extract_yt_term, remove_words
 
 con = sqlite3.connect("jarvis.db")
 cursor = con.cursor()
@@ -40,7 +41,7 @@ def opencommand(query):
             results = cursor.fetchall()
 
             if len(results) != 0:
-                speak (OPENING_MESSAGE+query)
+                speak(OPENING_MESSAGE+query)
                 os.startfile(results[0][0])
 
             elif len(results) == 0: 
@@ -109,4 +110,73 @@ def hotword():
         if paud is not None:
             paud.terminate()
             
-   
+# find contacts
+def findcontact(query):
+    
+    words_to_remove = [ASSISTANT_NAME, 'make', 'a', 'to', 'phone', 'call', 'send', 'message', 'wahtsapp', 'video']
+    query = remove_words(query, words_to_remove)
+
+    try:
+        query = query.strip().lower()
+        cursor.execute("SELECT mobile_no FROM contacts WHERE LOWER(name) LIKE ? OR LOWER(name) LIKE ?", ('%' + query + '%', query + '%'))
+        results = cursor.fetchall()
+        print(results[0][0])
+        mobile_number_str = str(results[0][0])
+
+        if not mobile_number_str.startswith('+91'):
+            mobile_number_str = '+91' + mobile_number_str
+
+        return mobile_number_str, query
+    
+    except Exception:  # Or specify the exact exception
+     speak('not exist in contacts')
+     return 0, 0
+
+
+def whatsapp(mobile_no, message, flag, name):
+    
+
+    if flag == 'message':
+        target_tab = 20
+        jarvis_message = "message send successfully to "+name
+
+    elif flag == 'call':
+        target_tab = 14
+        message = ''
+        jarvis_message = "calling to "+name
+
+    else:
+        target_tab = 13
+        message = ''
+        jarvis_message = "staring video call with "+name
+
+
+    # Encode the message for URL
+    encoded_message = quote(message)
+    print(encoded_message)
+    # Construct the URL
+    whatsapp_url = f"whatsapp://send?phone={mobile_no}&text={encoded_message}"
+
+    # Construct the full command
+    full_command = f'start "" "{whatsapp_url}"'
+
+    # Open WhatsApp with the constructed URL using cmd.exe
+    subprocess.run(full_command, shell=True)
+    time.sleep(5)
+    subprocess.run(full_command, shell=True)
+    
+    autogui.hotkey('ctrl', 'f')
+
+    for _ in range(1, target_tab):
+        autogui.hotkey('tab')
+
+    autogui.hotkey('enter')
+    speak(jarvis_message)
+
+
+# chat bot 
+
+
+
+
+
