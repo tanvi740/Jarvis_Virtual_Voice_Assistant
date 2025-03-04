@@ -6,6 +6,7 @@ import struct
 import subprocess
 import time
 import webbrowser
+from hugchat import hugchat
 import pyautogui as autogui
 from playsound import playsound
 import eel
@@ -175,8 +176,15 @@ def whatsapp(mobile_no, message, flag, name):
 
 
 # chat bot 
-
-
+def chatbot(query):
+    user_input = query.lower()
+    chatbott = hugchat.ChatBot(cookie_path="engine\\cookies.json")
+    idd = chatbott.new_conversation()
+    chatbott.change_conversation(idd)
+    response =  chatbott.chat(user_input)
+    print(response)
+    speak(response)
+    return response
 
 
 

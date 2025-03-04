@@ -7,7 +7,7 @@ import time
 
 
 def speak(text):
-    
+    text=str(text)
     engine = pyttsx3.init('sapi5')
     voices = engine.getProperty('voices') 
     engine.setProperty('voice', voices[0].id)
@@ -90,7 +90,8 @@ def allcommands(message=1):
                 whatsapp(contact_no,query,flag,name)
 
         else:
-            print("not run")
+            from engine.features import chatbot
+            chatbot(query)
     except Exception as e:
         print(f"Error:{str(e)}")                            
     
