@@ -2,13 +2,13 @@ import keyboard
 from main import start
 
 
-def startjarvis():
-    print("Jarvis is running...")
-    start()
+#/*def startjarvis():
+#    print("Jarvis is running...")
+ #   start()
 
-print("Press Windows+J to start Jarvis...")
-keyboard.wait("win+j")  # जब तक Windows+J नहीं दबाते, रुकेगा
-startjarvis()
+#print("Press Windows+J to start Jarvis...")
+#keyboard.wait("win+j")  # जब तक Windows+J नहीं दबाते, रुकेगा
+#startjarvis()
 import multiprocessing
 import subprocess
 
@@ -32,6 +32,7 @@ if __name__ == '__main__':
         p1 = multiprocessing.Process(target=startjarvis)
         p2 = multiprocessing.Process(target=listenhotword)
         p1.start()
+        subprocess.call(r'device.bat')
         p2.start()
         p1.join()
 
