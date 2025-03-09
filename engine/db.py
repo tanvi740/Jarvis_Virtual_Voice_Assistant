@@ -43,9 +43,9 @@ cursor = con.cursor()
 #con.close()
 
 
-#query = "INSERT INTO contacts VALUES (null,'special', '+91 99353 51335', 'null')"
-#cursor.execute(query)
-#con.commit()
+query = "INSERT INTO contacts VALUES (null,'tanvi', '+91 70577 43401', 'null')"
+cursor.execute(query)
+con.commit()
 
 #query = 'vishakha'
 #query = query.strip().lower()

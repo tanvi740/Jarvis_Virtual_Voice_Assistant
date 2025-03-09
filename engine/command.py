@@ -6,6 +6,7 @@ import time
 
 
 
+
 def speak(text):
     text=str(text)
     engine = pyttsx3.init('sapi5')
@@ -72,22 +73,40 @@ def allcommands(message=1):
             playyoutube(query)
         
         elif SEND_MESSAGE in query or PHONE_CALL in query or VIDEO_CALL in query:
-            from engine.features import findcontact, whatsapp
-            flag=""
-            contact_no, name = findcontact(query)
-            if(contact_no != 0):
+            from engine.features import findcontact, whatsapp,makecall
+            contact_no,name=findcontact(query)
+            if(contact_no!=0):
+                speak("Which mode you want to use Whatspp or mobile")
+                preference=takecommand()
+                print(preference)
                 
-                if "send message" in query:
-                    flag='message'
-                    speak("what message to send")
-                    query=takecommand() 
+                if "mobile" in preference:
+                    if SEND_MESSAGE  in query or "send sms" in query: 
+                        speak("what message to send")
+                        message = takecommand()
+                       # sendmessage(message, contact_no, name)
+                    elif PHONE_CALL in query:
+                        makecall(name, contact_no)
+                    else:
+                        speak("please try again")
 
-                elif "phone call" in query:
-                   flag='call'
+                elif "whatsapp" in preference:
+                    message = ""
+                    if SEND_MESSAGE  in query:
+                        message = 'message'
+                        speak("what message to send")
+                        query = takecommand()        
+
+            
+
+                elif PHONE_CALL in query:
+                   message='call'
                 else:
-                    flag='video call'
+                    message=VIDEO_CALL
 
-                whatsapp(contact_no,query,flag,name)
+                
+
+                whatsapp(contact_no,query,message,name)
 
         else:
             from engine.features import chatbot

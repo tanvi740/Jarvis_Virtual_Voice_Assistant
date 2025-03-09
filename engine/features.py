@@ -9,6 +9,7 @@ import webbrowser
 from hugchat import hugchat
 import pyautogui as autogui
 from playsound import playsound
+
 import eel
 import pvporcupine
 import pyaudio
@@ -64,8 +65,10 @@ def opencommand(query):
             speak(f"Something went wrong: {str(e)}")
             
 
-       
-         
+import pyautogui
+import time
+
+
 
 def playyoutube(query):
     search_term = extract_yt_term(query)
@@ -133,12 +136,11 @@ def findcontact(query):
      speak('not exist in contacts')
      return 0, 0
 
-
 def whatsapp(mobile_no, message, flag, name):
     
 
     if flag == 'message':
-        target_tab = 20
+        target_tab = 9
         jarvis_message = "message send successfully to "+name
 
     elif flag == 'call':
@@ -187,4 +189,9 @@ def chatbot(query):
     return response
 
 
+def makecall(name, mobileno):
+    mobileno =mobileno.replace(" ", "")
+    speak("Calling "+name)
+    command = 'adb shell am start -a android.intent.action.CALL -d tel:'+mobileno
+    os.system(command)
 
